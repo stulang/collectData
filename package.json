@@ -1,0 +1,22 @@
+{
+  "name": "collectdata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "collectData.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stulang/collectData.git"
+  },
+  "keywords": [
+    "collect"
+  ],
+  "author": "sunwq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stulang/collectData/issues"
+  },
+  "homepage": "https://github.com/stulang/collectData#readme"
+}

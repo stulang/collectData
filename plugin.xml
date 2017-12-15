@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.inspur.collectData" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>collectData</name>
+    <js-module name="collectData" src="www/collectData.js">
+        <clobbers target="collectData" />
+    </js-module>
+
+	<platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="sunDebug">
+        <param name="android-package" value="com.amitshekhar.DebugPlugin"/>
+      </feature>
+    </config-file>
+	<source-file src="src/plugin/bean/MailData.java" 	target-dir="src/com/inspur/plugin/bean"/>
+	<source-file src= "src/plugin/bean/MailSenderInfo.java" target-dir="src/com/inspur/plugin/bean"/>
+	<source-file src= "src/plugin/bean/MultiMailsender.java"  target-dir="src/com/inspur/plugin/bean"/>
+	<source-file src="src/plugin/bean/MyAuthenticator.java" target-dir="src/com/inspur/plugin/bean"/>
+	<source-file src="src/plugin/MailPlugin.java" target-dir="src/com/inspur/plugin"/>
+	<source-file src="libs/activation.jar" target-dir="libs"/>
+	<source-file src="libs/additionnal.jar.jar" target-dir="libs"/>
+	<source-file src="libs/mail.jar" target-dir="libs"/>
+ 
+ 
+  </platform>
+</plugin>
