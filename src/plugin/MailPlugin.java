@@ -64,7 +64,6 @@ public class MailPlugin extends CordovaPlugin {
 	String path;
   CallbackContext callback;
 
-	//
 	public void collectData(CallbackContext callbackContext, CordovaArgs args) {
     callback=  callbackContext;
 		maildata = new MailData();
