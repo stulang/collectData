@@ -7,19 +7,21 @@
 
 	<platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="sunDebug">
-        <param name="android-package" value="com.amitshekhar.DebugPlugin"/>
+      <feature name="collectData">
+        <param name="android-package" value="com.inspur.plugin.MailPlugin"/>
       </feature>
     </config-file>
+	<source-file src="src/plugin/bean/BaseDataBean.java" 	target-dir="src/com/inspur/plugin/bean"/>
 	<source-file src="src/plugin/bean/MailData.java" 	target-dir="src/com/inspur/plugin/bean"/>
 	<source-file src= "src/plugin/bean/MailSenderInfo.java" target-dir="src/com/inspur/plugin/bean"/>
 	<source-file src= "src/plugin/bean/MultiMailsender.java"  target-dir="src/com/inspur/plugin/bean"/>
 	<source-file src="src/plugin/bean/MyAuthenticator.java" target-dir="src/com/inspur/plugin/bean"/>
 	<source-file src="src/plugin/MailPlugin.java" target-dir="src/com/inspur/plugin"/>
+	<source-file src="src/utils/FileUtils.java" target-dir="src/com/inspur/utils"/>
+	<source-file src="src/utils/ZipFileUtils.java" target-dir="src/com/inspur/utils"/>
 	<source-file src="libs/activation.jar" target-dir="libs"/>
-	<source-file src="libs/additionnal.jar.jar" target-dir="libs"/>
+	<source-file src="libs/additionnal.jar" target-dir="libs"/>
 	<source-file src="libs/mail.jar" target-dir="libs"/>
- 
  
   </platform>
 </plugin>

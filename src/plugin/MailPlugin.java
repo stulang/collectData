@@ -4,40 +4,73 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaArgs;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
+import org.json.JSONException;
 
 import android.os.Handler;
 import android.os.Message;
-
-import com.inspur.moa.plugin.ImpPlugin;
+import android.util.Log;
 import com.inspur.plugin.bean.MailData;
 import com.inspur.plugin.bean.MultiMailsender;
 import com.inspur.plugin.bean.MultiMailsender.MultiMailSenderInfo;
 import com.inspur.utils.FileUtils;
 import com.inspur.utils.ZipFileUtils;
-import com.inspur.utils.iLog;
 
-public class MailPlugin extends ImpPlugin {
+public class MailPlugin extends CordovaPlugin {
 
 	private static final String TAG = "MailPlugin";
 
-	@Override
-	public void execute(String action, JSONObject paramsObject) {
- 		if("collectData".equals(action)){
- 			collectData(paramsObject.toString());
-		}
-	}
+  @Override
+  public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+    super.initialize(cordova, webView);
+    Log.d("MailPlugin", "initialize"  );
+   }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+  }
+
+  @Override
+  public void onResume(boolean multitasking) {
+    super.onResume(multitasking);
+  }
+
+  @Override
+  public void onStop() {
+
+    super.onStop();
+  }
+
+
+  @Override
+  public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+    boolean cmdProcessed = true;
+    if ("collectData".equals(action)) {
+      collectData(callbackContext, args);
+     } else {
+      cmdProcessed = false;
+    }
+
+    return cmdProcessed;
+  }
 
 	MailData maildata;
 	String path;
-	
-	
+  CallbackContext callback;
+
 	//
-	public void collectData(String json) {
+	public void collectData(CallbackContext callbackContext, CordovaArgs args) {
+    callback=  callbackContext;
 		maildata = new MailData();
-		maildata = (MailData) maildata.conver(json);
+		maildata = (MailData) maildata.conver(args.optJSONObject(0).toString());
  		final MultiMailSenderInfo mailInfo = maildata.getMailInfo();
-		path = context.getFilesDir().getParent();
+		path = this.cordova.getActivity().getFilesDir().getParent();
 		try {
 			File[] files  ;
 			if(maildata.dataFileList.size()==0){
@@ -54,7 +87,7 @@ public class MailPlugin extends ImpPlugin {
 				files = new File[m+n];
 				int i=0;
 				while(m>0){
-					files[i++]=new File(path +maildata.dataFileList.get(--m)); 
+					files[i++]=new File(path +maildata.dataFileList.get(--m));
 				}
 				while(n>0){
 					path   = FileUtils.getSDPath();
@@ -63,18 +96,21 @@ public class MailPlugin extends ImpPlugin {
 			}
 			String res=ZipFileUtils.zip(files, path + "/data.zip");
 			if(res!=null){
-				jsCallback("0");
-				iLog.e(TAG, res);
+        if (callbackContext != null) {
+           callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION,"压缩文件失败"));
+        }
+				Log.e(TAG, res);
 				return;
 			}
 			List<File> fileList = new ArrayList<File>();
 			fileList.add(new File(path + "/data.zip"));
 			mailInfo.setFileList(fileList);
 		} catch (Exception e) {
-			iLog.e("sendMail", e.getMessage(), e);
+			Log.e("sendMail", e.getMessage(), e);
 			e.printStackTrace();
-			jsCallback("0");
-			return;
+      if (callbackContext != null) {
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION,"压缩文件失败"));
+      }			return;
 		}
 
 		new Thread() {
@@ -105,8 +141,9 @@ public class MailPlugin extends ImpPlugin {
 	Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			jsCallback(msg.what + "");
-		}
+      if (callback != null) {
+        callback.sendPluginResult(new PluginResult(PluginResult.Status.OK,msg.what));
+      }		}
 	};
 
 	@Override
